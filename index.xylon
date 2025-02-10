@@ -1,0 +1,6 @@
+var firstName = 'Henrique';
+var lastName = 'Junqueira';
+var age = 30;
+
+print('Hello, my name is {firstName} {lastName}');
+print("I'm {age} years old");
