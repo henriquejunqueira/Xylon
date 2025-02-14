@@ -1,0 +1,1 @@
+(impl Fn(_) -> Result<(_, _), nom::Err<_>>, impl Parser<_, Output = _, Error = _>, fn(_) -> Result<(_, _), nom::Err<_>> {nom::character::complete::space0::<_, _>}, impl Parser<&str, Output = Expr, Error = nom::error::Error<&str>>, impl Parser<_, Output = Option<<impl Fn(_) -> Result<(_, _), nom::Err<_>> as Parser<_>>::Output>, Error = _>)

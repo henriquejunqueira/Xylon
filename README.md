@@ -1,9 +1,5 @@
 # Xylon programming language project source code repository
 
-## Information
-
-- Developer: Henrique Junqueira 🇧🇷
-
 ### **Xylon – The Multilingual and Flexible Programming Language**
 
 #### 🟢 **What is Xylon?**
