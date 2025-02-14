@@ -1,1 +1,1 @@
-/home/henrique/Documentos/projetos/desenvolvimento/Xylon/target/debug/Xylon: /home/henrique/Documentos/projetos/desenvolvimento/Xylon/src/main.rs
+/home/henrique/Documentos/projetos/desenvolvimento/Xylon/target/debug/Xylon: /home/henrique/Documentos/projetos/desenvolvimento/Xylon/src/ast.rs /home/henrique/Documentos/projetos/desenvolvimento/Xylon/src/lexer.rs /home/henrique/Documentos/projetos/desenvolvimento/Xylon/src/main.rs /home/henrique/Documentos/projetos/desenvolvimento/Xylon/src/parser.rs /home/henrique/Documentos/projetos/desenvolvimento/Xylon/src/translator.rs
