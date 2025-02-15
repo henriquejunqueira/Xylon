@@ -8,7 +8,11 @@ pub enum Token {
     Equals,
     StringLiteral(String),
     IntegerLiteral(i64),
-    Plus, // New operator '+'
+    Plus,     // new operator '+'
+    Minus,    // new operator '-'
+    Asterisk, // new operator '*'
+    Slash,    // new operator '/'
+    Percent,  // new operator '%'
     Semicolon,
 }
 
@@ -75,6 +79,18 @@ pub fn tokenize(input: &str) -> Vec<Token> {
             tokens.push(Token::IntegerLiteral(number.parse().unwrap()));
         } else if c == '+' {
             tokens.push(Token::Plus);
+            chars.next();
+        } else if c == '-' {
+            tokens.push(Token::Minus);
+            chars.next();
+        } else if c == '*' {
+            tokens.push(Token::Asterisk);
+            chars.next();
+        } else if c == '/' {
+            tokens.push(Token::Slash);
+            chars.next();
+        } else if c == '%' {
+            tokens.push(Token::Percent);
             chars.next();
         } else {
             chars.next();

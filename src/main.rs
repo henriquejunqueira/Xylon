@@ -21,15 +21,31 @@ fn main() -> io::Result<()> {
     // println!("AST: {:?}", ast);
 
     // Reads the contents of a "code.js" file
-    let source_code = fs::read_to_string("examples/examples.xylon")?;
+    //let source_code = fs::read_to_string("examples/examples.xylon")?;
 
     // Tokenize and analyze code
+    //let tokens = tokenize(&source_code);
+    //let ast = parse(&tokens);
+
+    // Displays the tokens and AST
+    //println!("Tokens: {:?}", tokens);
+    //println!("AST: {:?}", ast);
+
+    //Ok(())
+
+    // ! Creating a cleaner output
+    let source_code = fs::read_to_string("examples/examples.xylon")?;
+
     let tokens = tokenize(&source_code);
     let ast = parse(&tokens);
 
-    // Displays the tokens and AST
     println!("Tokens: {:?}", tokens);
-    println!("AST: {:?}", ast);
+
+    println!("\nFormatted AST:");
+
+    for expr in &ast {
+        println!("{}", expr);
+    }
 
     Ok(())
 }

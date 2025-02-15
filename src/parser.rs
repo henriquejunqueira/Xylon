@@ -23,17 +23,27 @@ pub fn parse(tokens: &[Token]) -> Vec<Expr> {
                         };
 
                         // Verifica se há um operador '+' logo depois do valor
-                        if let Some(Token::Plus) = iter.peek() {
-                            iter.next(); // Consome '+'
+                        while let Some(op_token) = iter.peek() {
+                            let op = match op_token {
+                                Token::Plus => Operator::Add,
+                                Token::Minus => Operator::Subtract,
+                                Token::Asterisk => Operator::Multiply,
+                                Token::Slash => Operator::Divide,
+                                Token::Percent => Operator::Modulo,
+                                _ => break,
+                            };
+
+                            iter.next(); // Consumes the operator
+
                             if let Some(Token::IntegerLiteral(n2)) = iter.next() {
                                 literal = Expr::BinaryOperation {
                                     left: Box::new(literal),
-                                    op: Operator::Add,
+                                    op,
                                     right: Box::new(Expr::VariableDeclaration {
                                         name: "_".to_string(),
                                         value: Literal::Integer(*n2),
                                     }),
-                                };
+                                }
                             }
                         }
 
