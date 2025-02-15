@@ -21,7 +21,7 @@ fn main() -> io::Result<()> {
     // println!("AST: {:?}", ast);
 
     // Reads the contents of a "code.js" file
-    let source_code = fs::read_to_string("src/code.js")?;
+    let source_code = fs::read_to_string("examples/examples.xylon")?;
 
     // Tokenize and analyze code
     let tokens = tokenize(&source_code);
