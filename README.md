@@ -1,5 +1,7 @@
 # Xylon programming language project source code repository
 
+![Xylon language logo](/assets/logo-xylon.png)
+
 ### **Xylon – The Multilingual and Flexible Programming Language**
 
 #### 🟢 **What is Xylon?**
