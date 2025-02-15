@@ -7,6 +7,7 @@ pub fn parse(tokens: &[Token]) -> Vec<Expr> {
     let mut iter = tokens.iter().peekable();
 
     while let Some(token) = iter.next() {
+        // Iter error
         if *token == Token::Var {
             if let Some(Token::Identifier(name)) = iter.next() {
                 if let Some(Token::Equals) = iter.next() {
