@@ -34,7 +34,7 @@ fn main() -> io::Result<()> {
     //Ok(())
 
     // ! Creating a cleaner output
-    let source_code = fs::read_to_string("examples/examples.xylon")?;
+    let source_code = fs::read_to_string("examples/examples-pt-br.xylon")?;
 
     let tokens = tokenize(&source_code);
     let ast = parse(&tokens);

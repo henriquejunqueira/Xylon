@@ -1,5 +1,6 @@
 use crate::ast::{Expr, Literal, Operator};
 use crate::lexer::Token;
+use std::iter::Peekable;
 
 pub fn parse(tokens: &[Token]) -> Vec<Expr> {
     let mut expressions = Vec::new();
@@ -13,11 +14,11 @@ pub fn parse(tokens: &[Token]) -> Vec<Expr> {
                         let mut literal = match value {
                             Token::StringLiteral(s) => Expr::VariableDeclaration {
                                 name: name.clone(),
-                                value: Literal::String(s.clone()),
+                                value: Box::new(Expr::Literal(Literal::String(s.clone()))),
                             },
                             Token::IntegerLiteral(n) => Expr::VariableDeclaration {
                                 name: name.clone(),
-                                value: Literal::Integer(*n),
+                                value: Box::new(Expr::Literal(Literal::Integer(*n))),
                             },
                             _ => panic!("Esperado valor após '='"),
                         };
@@ -35,14 +36,20 @@ pub fn parse(tokens: &[Token]) -> Vec<Expr> {
 
                             iter.next(); // Consumes the operator
 
-                            if let Some(Token::IntegerLiteral(n2)) = iter.next() {
+                            if let Some(next_token) = iter.next() {
+                                let right_expr = match next_token {
+                                    Token::IntegerLiteral(n2) => {
+                                        Expr::Literal(Literal::Integer(*n2))
+                                    }
+                                    Token::Identifier(name) => Expr::Identifier(name.clone()),
+                                    _ => panic!(
+                                        "Esperado número ou variável após operador matemático"
+                                    ),
+                                };
                                 literal = Expr::BinaryOperation {
                                     left: Box::new(literal),
                                     op,
-                                    right: Box::new(Expr::VariableDeclaration {
-                                        name: "_".to_string(),
-                                        value: Literal::Integer(*n2),
-                                    }),
+                                    right: Box::new(right_expr),
                                 }
                             }
                         }
@@ -50,6 +57,30 @@ pub fn parse(tokens: &[Token]) -> Vec<Expr> {
                         expressions.push(literal);
                     }
                 }
+            }
+        } else if *token == Token::If {
+            if let Some(condition) = iter.next() {
+                let condition_expr = match condition {
+                    Token::IntegerLiteral(n) => Expr::Literal(Literal::Integer(*n)),
+                    Token::Identifier(name) => Expr::Identifier(name.clone()),
+                    _ => panic!("Expressão inválida dentro do if"),
+                };
+
+                let tokens_vec: Vec<Token> = iter.map(|t| t.clone()).collect();
+                let then_branch = parse(&tokens_vec);
+                let else_branch = if let Some(Token::Else) = iter.peek() {
+                    iter.next(); // Consome 'else'
+                    let parsed_else = parse(&iter.by_ref().cloned().collect::<Vec<_>>());
+                    parsed_else.into_iter().last()
+                } else {
+                    None
+                };
+
+                expressions.push(Expr::Conditional {
+                    condition: Box::new(condition_expr),
+                    then_branch: Box::new(then_branch.into_iter().last().unwrap()),
+                    else_branch: else_branch.map(Box::new),
+                });
             }
         }
     }

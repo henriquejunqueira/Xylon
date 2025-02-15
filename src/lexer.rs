@@ -1,9 +1,10 @@
 // Tokenizer (lexer)
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     Var,
     Const,
+    Println, // checking
     Identifier(String),
     Equals,
     StringLiteral(String),
@@ -14,6 +15,8 @@ pub enum Token {
     Slash,    // new operator '/'
     Percent,  // new operator '%'
     Semicolon,
+    If,   // checking
+    Else, // checking
 }
 
 use crate::translator::Translator;
@@ -40,7 +43,10 @@ pub fn tokenize(input: &str) -> Vec<Token> {
             match translated_ident.as_str() {
                 "var" => tokens.push(Token::Var),
                 "const" => tokens.push(Token::Const),
-                _ => tokens.push(Token::Identifier(ident)),
+                "println!" => tokens.push(Token::Println), // checking
+                "if" => tokens.push(Token::If),            // checking
+                "else" => tokens.push(Token::Else),        // checking
+                _ => tokens.push(Token::Identifier(translated_ident)),
             }
             // if ident == "var" {
             //     tokens.push(Token::Var);
@@ -59,13 +65,15 @@ pub fn tokenize(input: &str) -> Vec<Token> {
             let mut string = String::new();
             while let Some(&ch) = chars.peek() {
                 if ch == quote {
+                    chars.next();
+                    tokens.push(Token::StringLiteral(string));
                     break;
                 }
                 string.push(ch);
                 chars.next();
             }
-            chars.next();
-            tokens.push(Token::StringLiteral(string));
+            // chars.next();
+            // tokens.push(Token::StringLiteral(string));
         } else if c.is_digit(10) {
             let mut number = String::new();
             while let Some(&ch) = chars.peek() {
@@ -87,8 +95,37 @@ pub fn tokenize(input: &str) -> Vec<Token> {
             tokens.push(Token::Asterisk);
             chars.next();
         } else if c == '/' {
-            tokens.push(Token::Slash);
             chars.next();
+            if let Some(&next) = chars.peek() {
+                if next == '/' {
+                    // Line comment (//)
+                    while let Some(&ch) = chars.peek() {
+                        if ch == '\n' {
+                            break;
+                        }
+
+                        chars.next();
+                    }
+                } else if next == '*' {
+                    // Block comment (/* ... */)
+                    chars.next();
+                    while let Some(&ch) = chars.peek() {
+                        chars.next();
+                        if ch == '*' {
+                            if let Some(&end) = chars.peek() {
+                                if end == '/' {
+                                    chars.next();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    tokens.push(Token::Slash);
+                }
+            } else {
+                tokens.push(Token::Slash);
+            }
         } else if c == '%' {
             tokens.push(Token::Percent);
             chars.next();
