@@ -17,6 +17,8 @@ pub enum Token {
     Semicolon,
     If,   // checking
     Else, // checking
+    LeftBrace,
+    RightBrace,
 }
 
 use crate::translator::Translator;
